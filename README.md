@@ -93,7 +93,7 @@ sudo yum install -y \
     mysql-server mysql-devel
 ```
 
-### eBPF/libbpf 配置（可选，用于高效网络采集）
+### eBPF/libbpf 配置
 
 libbpf 相关依赖的安装和配置请参考 **AI智能网络检测知识库** 中的 libbpf 配置文档。
 
@@ -192,7 +192,7 @@ Monitor Client listening on 0.0.0.0:50051
 Query service available for performance data queries
 ```
 
-### 2. 加载内核模块（被监控机器，可选）
+### 2. 加载内核模块
 
 ```bash
 sudo insmod worker/src/kmod/cpu_stat_collector.ko
@@ -297,7 +297,7 @@ web-server_10.0.0.5
 - **语言**: C++
 - **RPC 框架**: gRPC + Protocol Buffers
 - **数据采集**: Linux 内核模块 + eBPF + procfs
-- **数据库**: MySQL (可选)
+- **数据库**: MySQL
 - **构建系统**: CMake
 
 

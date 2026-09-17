@@ -52,3 +52,13 @@ if(ENABLE_MYSQL)
 endif()
 
 target_link_libraries(manager PUBLIC ${MANAGER_LIBS})
+
+# 历史查询客户端，与 Manager 共用协议，不依赖 MySQL 客户端库
+add_executable(query_client
+    src/query_main.cpp
+    src/rpc/rpc_client.cpp
+)
+target_include_directories(query_client PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+target_link_libraries(query_client PRIVATE monitor_proto gRPC::grpc++)

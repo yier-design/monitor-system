@@ -220,7 +220,32 @@ Received monitor data from: server1
 Processed data from server1_192.168.1.101, score: 75.32
 ```
 
-### 5. 停止服务和卸载内核模块
+### 5. 查询历史记录
+
+默认编译会同时生成 `build/manager/query_client`，它复用 `RpcClient` 调用
+Manager 的 `QueryService.QueryPerformance`。也可以在配置完成后单独编译：
+
+```bash
+cmake --build build --target query_client
+```
+
+Manager 需要启用 MySQL 支持、成功连接数据库，并已有 Worker 上报入库的数据。
+在项目根目录执行：
+
+```bash
+# 参数：Manager 地址、主机标识、起始时间、结束时间、页码、每页条数
+./build/manager/query_client 127.0.0.1:50051 server1_192.168.1.101 \
+  '2026-09-17T00:00:00+08:00' '2026-09-17T23:59:59+08:00' 1 20
+```
+
+将主机标识替换为 Manager 日志中的 `hostname_ip`，时间范围替换为实际采集时间。
+时间使用带时区的 RFC3339 格式，支持 `Z`（UTC）或 `+08:00` 等偏移；服务端按秒查询。
+页码和每页条数可省略，默认分别为 `1` 和 `100`。
+客户端显示总记录数、分页信息，以及每条记录的 UTC 时间、主机、CPU/内存/磁盘使用率、
+一分钟负载和评分。查询超时为 10 秒；参数错误退出码为 2，RPC 失败为 1，成功为 0。
+使用 `./build/manager/query_client --help` 查看参数说明。
+
+### 6. 停止服务和卸载内核模块
 
 ```bash
 # 停止 Worker 和 Manager（Ctrl+C）
